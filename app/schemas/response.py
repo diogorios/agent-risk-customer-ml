@@ -1,8 +1,13 @@
 from pydantic import BaseModel
 from typing import List
 
+
 class CustomerRiskResponse(BaseModel):
+    nome_cliente_v3: str
     score: int
-    probabilidade_inadimplencia: float
     nivel_risco: str
-    explicacao: List[str]
+    parecer_credito: str
+    motivos: List[str]
+    acao_sugerida: List[str]
+    limite_recomendado: float
+    entrada_minima: float
