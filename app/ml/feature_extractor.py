@@ -19,6 +19,7 @@ def extract_features(payload: dict):
         "dias_medio_atraso": resumo["media_dias_atraso"] or 0,
         "qtd_titulos_abertos": len(titulos),
         "valor_total_aberto": resumo["valor_em_aberto"] or 0,
+        "valor_total_pago": resumo["valor_pago"] or 0,
         "tempo_relacionamento": total_titulos,
         "ticket_medio": ticket_medio,
         "maior_atraso": maior_atraso,

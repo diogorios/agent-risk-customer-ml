@@ -62,6 +62,36 @@ def generate_credit_decision(features: dict, prediction: dict):
     else:
         nivel = "BAIXO"
 
+    
+    if features["valor_pago"] <= 0:
+        motivos.append(
+            "Cliente sem histórico de pagamento; aplicada política inicial de crédito"
+        )
+
+        if nivel == "ALTO":
+            limite = 0
+        elif nivel == "MEDIO":
+            limite = 500
+        else:
+            limite = 1000
+
+    else:
+        base_limite = features["valor_pago"] / 3
+
+        if nivel == "ALTO":
+            motivos.append("Política de crédito bloqueia concessão automática para risco alto")
+            limite = 0
+        elif nivel == "MEDIO":
+            limite = base_limite * 0.75
+        else:
+            limite = base_limite * 1.5
+
+    # Desconta exposição atual
+    limite -= features["valor_total_aberto"]
+
+    # Proteções finais
+    limite = max(round(limite, 2), 0)
+
     # Decisão final
     if nivel == "ALTO":
         parecer = "Cliente apresenta risco elevado de inadimplência."
@@ -70,7 +100,6 @@ def generate_credit_decision(features: dict, prediction: dict):
             "Reduzir limite de crédito",
             "Exigir entrada mínima"
         ]
-        limite = 0
         entrada = 50
 
     elif nivel == "MEDIO":
@@ -80,7 +109,6 @@ def generate_credit_decision(features: dict, prediction: dict):
             "Aplicar limite reduzido",
             "Monitorar próximas compras"
         ]
-        limite = 3000
         entrada = 20
 
     else:
@@ -89,7 +117,6 @@ def generate_credit_decision(features: dict, prediction: dict):
             "Crédito aprovado",
             "Manter limite padrão"
         ]
-        limite = 10000
         entrada = 0
 
     return {
