@@ -22,6 +22,7 @@ class ResumoHistoricoSchema(BaseModel):
     media_dias_atraso: float
     valor_total_faturado: float
     valor_em_aberto: float
+    valor_pago: float
 
 
 class ContasReceberSchema(BaseModel):
