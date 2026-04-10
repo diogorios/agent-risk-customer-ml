@@ -63,7 +63,7 @@ def generate_credit_decision(features: dict, prediction: dict):
         nivel = "BAIXO"
 
     
-    if features["valor_pago"] <= 0:
+    if features["valor_total_pago"] <= 0:
         motivos.append(
             "Cliente sem histórico de pagamento; aplicada política inicial de crédito"
         )
@@ -76,7 +76,7 @@ def generate_credit_decision(features: dict, prediction: dict):
             limite = 1000
 
     else:
-        base_limite = features["valor_pago"] / 3
+        base_limite = features["valor_total_pago"] / 3
 
         if nivel == "ALTO":
             motivos.append("Política de crédito bloqueia concessão automática para risco alto")
